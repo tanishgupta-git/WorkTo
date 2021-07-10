@@ -10,9 +10,13 @@ import { AntDesign,Entypo } from '@expo/vector-icons';
 export default function Home({navigation,todos,setTodos}) {
 
     useEffect(() => {
-     db.collection('todos').where('email','==',auth?.currentUser?.email).get().then( snapshot => {
-     setTodos(snapshot.docs.map(doc => ({key:doc.id,...doc.data()})));
-      });
+        const user = auth?.currentUser?.email;
+        const DateObject = new Date();
+        const date = DateObject.getDate().toString() + DateObject.getMonth().toString() + DateObject.getFullYear().toString();
+
+       db.collection('todos').doc(user).collection(date).orderBy('timeStamp','desc').get().then( snapshot => {
+             setTodos(snapshot.docs.map(doc => ({key:doc.id,...doc.data()})));
+        });
     },[])
 
    
@@ -79,11 +83,11 @@ const styles = StyleSheet.create({
     },
     content: {
       flex: 1,
-      padding: 40
+      padding: 20
     },
    list : {
      flex: 1,
-     marginTop:20
+     marginTop:20,
    },
    listHeading : {
      color: '#98ade7',

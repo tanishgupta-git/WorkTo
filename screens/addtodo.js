@@ -1,7 +1,8 @@
 import React,{useState} from 'react';
 import { StyleSheet,View, TextInput,TouchableOpacity, Alert,Keyboard,TouchableWithoutFeedback } from 'react-native';
-import { Text,Button } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { auth,db } from '../firebase/config';
+import firebase from 'firebase';
 
 
 export default function AddTodo({navigation,setTodos,todos}){
@@ -22,20 +23,28 @@ export default function AddTodo({navigation,setTodos,todos}){
             Alert.alert("Description must be greater than 10 characters");
             return;
           }
-          
-          db.collection('todos').add({
-            email:auth?.currentUser?.email,
-            title,
-            description,
-            done : false
-          }).then( (docRef) => {
-  
-           setTodos([{key:docRef.id,title:title,done:false },...todos]);
-           navigation.navigate("Home")
-          }).catch( (error) => {
-            console.error("Error adding document: ", error);
-        })
-          
+          const user = auth?.currentUser?.email;
+          const DateObject = new Date();
+          const date = DateObject.getDate().toString() + DateObject.getMonth().toString() + DateObject.getFullYear().toString();
+          if (user && date) {
+
+            db.collection('todos').doc(user).collection(date).add({
+                title,
+                description,
+                done : false,
+                timeStamp : firebase.firestore.FieldValue.serverTimestamp()
+              }).then( (docRef) => {
+      
+              setTodos([{key:docRef.id,title:title,done:false },...todos]);
+              navigation.navigate("Home");
+
+              }).catch( (error) => {
+                Alert.alert("Error adding task");
+            })
+
+      }else {
+        Alert.alert("Error adding task");
+      } 
       }
 
     return (

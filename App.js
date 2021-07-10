@@ -11,8 +11,6 @@ import Todo from './screens/todo';
 
 const Stack = createStackNavigator();
 
-
-
 export default function App() {
   const [todos,setTodos] = useState();
   return (
@@ -29,7 +27,7 @@ export default function App() {
             {props => <AddTodo {...props} todos={todos} setTodos={setTodos} />}
           </Stack.Screen>
           <Stack.Screen name="Todo" options={{  headerTitle:'Task',headerStyle: {backgroundColor: '#3450A1',height:60},headerTintColor: '#ffffff'}}>
-            {props => <Todo {...props} setTodos={setTodos} />}
+            {props => <Todo {...props} todos={todos} setTodos={setTodos} />}
           </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

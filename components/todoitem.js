@@ -1,15 +1,20 @@
 import React,{useState} from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity,View } from 'react-native';
 import { Entypo,AntDesign,MaterialIcons} from '@expo/vector-icons';
-import { db } from '../firebase/config';
+import { db,auth } from '../firebase/config';
 
 
 export default function TodoItem({ item,pressHandler}){
  const [done,Setdone] = useState(item.done);
 
  const doneHandler = () => {
+      const user = auth?.currentUser?.email;
+      const DateObject = new Date();
+      const date = DateObject.getDate().toString() + DateObject.getMonth().toString() + DateObject.getFullYear().toString();
+
+
        // here is item.key is the id of firebase document
-       db.collection('todos').doc(item.key).update({
+       db.collection('todos').doc(user).collection(date).doc(item.key).update({
            done : !done
        }).then(() => {
            Setdone(prev => !prev);
@@ -60,7 +65,7 @@ const styles  = StyleSheet.create({
     itemDonetext : {
         marginLeft:15,
         fontSize:18,
-        color:'#acbdec',
+        color:'#829ce3',
         textDecorationLine:'line-through'
     },
     deleted : {
