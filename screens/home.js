@@ -1,4 +1,4 @@
-import React, {useEffect } from 'react';
+import React, {useEffect,useState } from 'react';
 import { StyleSheet, View,FlatList,Alert,TouchableWithoutFeedback,Keyboard,StatusBar,TouchableOpacity } from 'react-native';
 import  { Text } from 'react-native-elements';
 import TodoItem from '../components/todoitem';
@@ -7,16 +7,19 @@ import { AntDesign,Entypo } from '@expo/vector-icons';
 
 
 
-export default function Home({navigation,todos,setTodos}) {
-
+export default function Home({navigation}) {
+    const [todos,setTodos] = useState();
+    
     useEffect(() => {
         const user = auth?.currentUser?.email;
         const DateObject = new Date();
-        const date = DateObject.getDate().toString() + DateObject.getMonth().toString() + DateObject.getFullYear().toString();
+        const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
 
-       db.collection('todos').doc(user).collection(date).orderBy('timeStamp','desc').get().then( snapshot => {
+       const unsubscribe = db.collection('todos').doc(user).collection(date).orderBy('timeStamp','desc').onSnapshot( snapshot => {
              setTodos(snapshot.docs.map(doc => ({key:doc.id,...doc.data()})));
         });
+
+      return () => unsubscribe();
     },[])
 
    

@@ -11,7 +11,7 @@ export default function Login({navigation}) {
     const handleSubmit = () => {
         auth.signInWithEmailAndPassword(email, password)
         .catch((error) => {
-          Alert.alert(error);
+          Alert.alert("email or password is incorrect");
         });
 
      }

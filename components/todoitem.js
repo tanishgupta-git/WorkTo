@@ -10,7 +10,7 @@ export default function TodoItem({ item,pressHandler}){
  const doneHandler = () => {
       const user = auth?.currentUser?.email;
       const DateObject = new Date();
-      const date = DateObject.getDate().toString() + DateObject.getMonth().toString() + DateObject.getFullYear().toString();
+      const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
 
 
        // here is item.key is the id of firebase document
@@ -49,7 +49,8 @@ const styles  = StyleSheet.create({
     item : {
         flexDirection:'row',
         padding:20,
-        paddingRight:45,
+        paddingRight:50,
+        paddingLeft:15,
         marginTop:10,
         borderWidth:1,
         borderColor:'transparent',
@@ -58,12 +59,12 @@ const styles  = StyleSheet.create({
         alignItems:'center'
     },
     itemText:{
-        marginLeft:15,
+        marginLeft:10,
         fontSize:18,
         color:'#acbdec'
     },
     itemDonetext : {
-        marginLeft:15,
+        marginLeft:10,
         fontSize:18,
         color:'#829ce3',
         textDecorationLine:'line-through'
