@@ -1,9 +1,9 @@
 import React,{useState} from 'react';
-import { StyleSheet,View, TextInput,TouchableOpacity, Alert,Keyboard,TouchableWithoutFeedback } from 'react-native';
+import { View, TextInput,TouchableOpacity, Alert,Keyboard,TouchableWithoutFeedback } from 'react-native';
 import { Button } from 'react-native-elements';
 import { auth,db } from '../firebase/config';
 import firebase from 'firebase';
-
+import styles from '../styles/form';
 
 export default function AddTodo({navigation}){
     const [title,setTitle] = useState("");
@@ -26,7 +26,6 @@ export default function AddTodo({navigation}){
           const user = auth?.currentUser?.email;
           const DateObject = new Date();
           const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
-          if (user && date) {
 
             db.collection('todos').doc(user).collection(date).add({
                 title,
@@ -40,9 +39,7 @@ export default function AddTodo({navigation}){
                 Alert.alert("Error adding task");
             })
 
-      }else {
-        Alert.alert("Error adding task");
-      } 
+     
       }
 
     return (
@@ -75,39 +72,3 @@ export default function AddTodo({navigation}){
     </TouchableWithoutFeedback>
    )    
 }
-
-const styles = StyleSheet.create({
-   container : {
-      backgroundColor : '#3450A1',
-      padding: 15,
-      flex: 1,
-      justifyContent:'center'
-   }, 
-    input : {
-        marginVertical:20,
-        padding: 15,
-        fontSize:19,
-        color:'#c5cfed',
-        backgroundColor:'#253974',
-        borderRadius : 4
-    },
-    addTaskButtonContainer:{
-      alignItems:'center',
-      marginVertical:20
-    },
-    addButton : {
-      width: 150,
-      padding: 10,
-      backgroundColor:'#A10CC9'
-    } ,
-    textArea: {
-      height:200,
-      textAlignVertical:'top',
-      marginVertical:20,
-      padding: 15,
-      fontSize:19,
-      color:'#c5cfed',
-      backgroundColor:'#253974',
-      borderRadius : 4
-    }
-})

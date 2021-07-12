@@ -1,12 +1,14 @@
 import React,{useState,useEffect} from 'react';
-import { StyleSheet,View, TextInput,TouchableOpacity, Alert,Keyboard,TouchableWithoutFeedback } from 'react-native';
+import { View, TextInput,TouchableOpacity, Alert,Keyboard,TouchableWithoutFeedback } from 'react-native';
 import { Button } from 'react-native-elements';
 import { auth,db } from '../firebase/config';
+import styles from '../styles/form';
 
 export default function EditTodo({navigation,route}) {
     const [title,setTitle] = useState("");
     const [description,setDescription] = useState("");
     const { todoId,updateCheck } = route.params; 
+    
     useEffect(() => {
      
         const user = auth?.currentUser?.email;
@@ -38,7 +40,6 @@ export default function EditTodo({navigation,route}) {
         const user = auth?.currentUser?.email;
         const DateObject = new Date();
         const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
-        if (user && date) {
 
           db.collection('todos').doc(user).collection(date).doc(todoId).update({
               title,
@@ -52,9 +53,7 @@ export default function EditTodo({navigation,route}) {
               Alert.alert("Error updating task");
           })
 
-    }else {
-      Alert.alert("Error updating task");
-    } 
+    
     }
 
     return (
@@ -79,47 +78,10 @@ export default function EditTodo({navigation,route}) {
                 value={description}
             />  
   
-          <View style={styles.addTaskButtonContainer}>
-                
+          <View style={styles.addTaskButtonContainer}>            
                 <TouchableOpacity><Button onPress={submitHandler}  title='Update Task' buttonStyle={styles.addButton}/></TouchableOpacity> 
           </View>
           </View>
       </TouchableWithoutFeedback>
      )  
 }
-
-const styles = StyleSheet.create({
-    container : {
-        backgroundColor : '#3450A1',
-        padding: 15,
-        flex: 1,
-        justifyContent:'center'
-     }, 
-     input : {
-         marginVertical:20,
-         padding: 15,
-         fontSize:19,
-         color:'#c5cfed',
-         backgroundColor:'#253974',
-         borderRadius : 4
-     },
-     addTaskButtonContainer:{
-       alignItems:'center',
-       marginVertical:20
-     },
-     addButton : {
-       width: 150,
-       padding: 10,
-       backgroundColor:'#A10CC9'
-     } ,
-     textArea: {
-       height:200,
-       textAlignVertical:'top',
-       marginVertical:20,
-       padding: 15,
-       fontSize:19,
-       color:'#c5cfed',
-       backgroundColor:'#253974',
-       borderRadius : 4
-     }
-})

@@ -52,7 +52,7 @@ export default function Home({navigation}) {
           </View>
             <Text h2 h2Style={styles.welcomeHeading}>What's up, {auth?.currentUser?.displayName}!</Text>
             <TouchableOpacity onPress={() => navigation.navigate('AddTodo')}>
-                   <Text style={styles.addTaskbutton}>Add New Task <Entypo name="circle-with-plus" size={24} color="#A10CC9" /></Text>
+                   <Text style={styles.addTaskbutton}><Entypo name="circle-with-plus" size={24} color="#A10CC9" /> Add new task here</Text>
             </TouchableOpacity>
             <View style={styles.list}>
                <Text style={styles.listHeading}>Today's Task</Text>
@@ -100,12 +100,10 @@ const styles = StyleSheet.create({
    addTaskbutton : {
      backgroundColor:'#041955',
      padding: 20,
-     width: 200,
+     flexDirection:'row',
+     alignItems:'center',
      color: '#b2bfe6',
      fontSize:20,
-     fontWeight:'bold',
-     justifyContent:'center',
-     alignItems:'center',
      borderRadius:4
    }
   });

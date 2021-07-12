@@ -36,6 +36,7 @@ export default function Todo({route,navigation}) {
         <View style={styles.container}>
             <Text h2 h2Style={styles.todoHeading}>{todo.title}</Text>
             <Text style={styles.description}>{todo.description}</Text>
+            <Text>{ todo.done ? 'Completed' : 'Not Completed'}</Text>
             <TouchableOpacity onPress={() => pressHandler(todoId)}><Text style={styles.todoDelete}>Delete Task</Text></TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('EditTodo',{ todoId,updateCheck })}><Text style={styles.todoDelete}>Edit Task</Text></TouchableOpacity>
         </View>
