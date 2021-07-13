@@ -4,12 +4,14 @@ import  { Text } from 'react-native-elements';
 import TodoItem from '../components/todoitem';
 import { auth,db } from '../firebase/config';
 import { AntDesign,Entypo } from '@expo/vector-icons';
-
+import * as Progress from 'react-native-progress';
 
 
 export default function Home({navigation}) {
-    const [todos,setTodos] = useState();
-    
+    const [todos,setTodos] = useState([]);
+    const [progress,setProgress] = useState(0);
+
+
     useEffect(() => {
         const user = auth?.currentUser?.email;
         const DateObject = new Date();
@@ -22,6 +24,22 @@ export default function Home({navigation}) {
       return () => unsubscribe();
     },[])
 
+    useEffect(() => {
+
+        const doneDocs =  todos.reduce( (x,y) => {
+          if (y.done) {
+            return x + 1
+          }else {
+            return x
+          }
+        },0);
+        if(!todos.length) {
+          setProgress(0);
+          return;
+        }
+       setProgress( (doneDocs/todos.length) * 100 );
+    
+      },[todos])
    
     const signOutHandler = () => {
       auth.signOut().then(() => {
@@ -51,15 +69,32 @@ export default function Home({navigation}) {
             </TouchableOpacity>
           </View>
             <Text h2 h2Style={styles.welcomeHeading}>What's up, {auth?.currentUser?.displayName}!</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('AddTodo')}>
-                   <Text style={styles.addTaskbutton}><Entypo name="circle-with-plus" size={24} color="#A10CC9" /> Add new task here</Text>
-            </TouchableOpacity>
+          <View style={styles.progressParent}>
+                <View style={styles.progressContainer}>
+                  <Progress.Circle 
+                      size={130} borderWidth={0} showsText={true} 
+                      color={'#85a4f9'}
+                      unfilledColor={'#06257a'}
+                      borderColor={'#303030'}
+                      progress={progress / 100}
+                      animated
+                      thickness={10}
+                      formatText={() => {
+                        return `${progress}%`
+                      }}
+                  
+                      />
+                   <TouchableOpacity onPress={() => navigation.navigate('AddTodo')}>
+                       <Text style={styles.addTaskbutton}><Entypo name="circle-with-plus" size={24} color="#ffffff" /> Add new task</Text>
+                    </TouchableOpacity>
+                </View>
+          </View>
             <View style={styles.list}>
                <Text style={styles.listHeading}>Today's Task</Text>
                <FlatList 
                data={todos}
                renderItem={({item}) => (
-                 <TodoItem item={item} pressHandler={pressHandler} />
+                 <TodoItem item={item} pressHandler={pressHandler} setTodos={setTodos} />
                )}
                />
             </View>
@@ -97,13 +132,24 @@ const styles = StyleSheet.create({
      marginVertical:5,
      fontSize:20
    },
-   addTaskbutton : {
+   progressParent : {
+     alignItems:'center'
+   },
+   progressContainer : {
      backgroundColor:'#041955',
-     padding: 20,
+     width:'90%',
+     padding: 29,
+     marginVertical:10,
+     alignItems:'center',
+     borderRadius:10
+   },
+   addTaskbutton : {
+     backgroundColor:'#A10CC9',
+     padding: 15,
      flexDirection:'row',
      alignItems:'center',
      color: '#b2bfe6',
-     fontSize:20,
+     fontSize:18,
      borderRadius:4
    }
   });

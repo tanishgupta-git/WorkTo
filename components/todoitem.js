@@ -4,7 +4,7 @@ import { Entypo,AntDesign,MaterialIcons} from '@expo/vector-icons';
 import { db,auth } from '../firebase/config';
 
 
-export default function TodoItem({ item,pressHandler}){
+export default function TodoItem({ item,pressHandler,setTodos}){
  const [done,Setdone] = useState(item.done);
 
  const doneHandler = () => {
@@ -18,6 +18,12 @@ export default function TodoItem({ item,pressHandler}){
            done : !done
        }).then(() => {
            Setdone(prev => !prev);
+           setTodos( prev =>  prev.map( todo => { 
+               if (todo.key === item.key){
+                 todo.done = !done;   
+               }
+               return todo;
+             }) );
        }).catch(() => {
            Alert.alert("Error while updating");
        })
