@@ -22,7 +22,8 @@ export default styles = StyleSheet.create({
      addButton : {
        width: 150,
        padding: 10,
-       backgroundColor:'#A10CC9'
+       backgroundColor:'#A10CC9',
+       marginTop:20
      } ,
      textArea: {
        height:200,

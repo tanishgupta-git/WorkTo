@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import { View, TextInput,TouchableOpacity, Alert,Keyboard,TouchableWithoutFeedback } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { Button } from 'react-native-elements';
 import { auth,db } from '../firebase/config';
 import firebase from 'firebase';
@@ -8,11 +9,18 @@ import styles from '../styles/form';
 export default function AddTodo({navigation}){
     const [title,setTitle] = useState("");
     const [description,setDescription] = useState("");
+    const [openPicker, setOpenPicker] = useState(false);
+    const [valuePicker, setValuePicker] = useState(null);
+    const [items, setItems] = useState([
+      {label: 'Business', value: 'Business'},
+      {label: 'Personal', value: 'Personal'},
+      {label: 'Other', value: 'Other'},
+    ]);
 
 
     const submitHandler = () => {
-          if (!title.length || !description.length) {
-            Alert.alert("Both the fields are required");
+          if (!title.length || !description.length || !valuePicker) {
+            Alert.alert("All the fields are required");
             return;
           }
           if (title.length < 3) {
@@ -23,6 +31,7 @@ export default function AddTodo({navigation}){
             Alert.alert("Description must be greater than 10 characters");
             return;
           }
+
           const user = auth?.currentUser?.email;
           const DateObject = new Date();
           const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
@@ -31,6 +40,7 @@ export default function AddTodo({navigation}){
                 title,
                 description,
                 done : false,
+                tasktype:valuePicker,
                 timeStamp : firebase.firestore.FieldValue.serverTimestamp()
               }).then( (docRef) => {
               navigation.navigate("Home");
@@ -62,7 +72,25 @@ export default function AddTodo({navigation}){
               placeholderTextColor='#8b9fda'
               onChangeText={(value) => setDescription(value)}
               value={description}
-          />  
+          /> 
+          <DropDownPicker
+            open={openPicker}
+            value={valuePicker}
+            items={items}
+            setOpen={setOpenPicker}
+            setValue={setValuePicker}
+            setItems={setItems}
+            placeholder="Select Task Type"
+            style={{ backgroundColor:'#253974',borderColor:'transparent'}}
+            placeholderStyle={{color: "#8b9fda",fontSize:18}}
+            arrowIconStyle={{width: 20,height: 20,tintColor: '#8b9fda'}}
+            tickIconStyle={{width: 20,height: 20,tintColor: '#8b9fda'}}
+            labelStyle={{color: '#c5cfed',fontSize:19}}
+            listItemContainerStyle={{backgroundColor:'#3450A1'}}
+            listItemLabelStyle={{color:'#c5cfed',fontSize:17}}
+            selectedItemContainerStyle={{backgroundColor: "#253974"}}
+            dropDownDirection="BOTTOM"
+          /> 
 
         <View style={styles.addTaskButtonContainer}>
               
