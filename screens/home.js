@@ -3,14 +3,15 @@ import { StyleSheet, View,FlatList,Alert,TouchableWithoutFeedback,Keyboard,Statu
 import  { Text } from 'react-native-elements';
 import TodoItem from '../components/todoitem';
 import { auth,db } from '../firebase/config';
-import { AntDesign,Entypo } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+import countTaskType from '../utils/countTasktype';
 import * as Progress from 'react-native-progress';
 
 
 export default function Home({navigation}) {
     const [todos,setTodos] = useState([]);
     const [progress,setProgress] = useState(0);
-
+    const [tasksCount,setTasksCount] = useState({Business:0,Personal:0,Other:0});
 
     useEffect(() => {
         const user = auth?.currentUser?.email;
@@ -19,7 +20,7 @@ export default function Home({navigation}) {
 
        const unsubscribe = db.collection('todos').doc(user).collection(date).orderBy('timeStamp','desc').onSnapshot( snapshot => {
              setTodos(snapshot.docs.map(doc => ({key:doc.id,...doc.data()})));
-        });
+             });
 
       return () => unsubscribe();
     },[])
@@ -38,6 +39,11 @@ export default function Home({navigation}) {
           return;
         }
        setProgress( (doneDocs/todos.length) * 100 );
+       const businessTasks = countTaskType(todos,'Business');
+       const personalTasks = countTaskType(todos,'Personal');
+       const otherTasks = countTaskType(todos,'Other');
+
+       setTasksCount({Business:businessTasks,Personal:personalTasks,Other:otherTasks});
     
       },[todos])
    
@@ -68,11 +74,11 @@ export default function Home({navigation}) {
              <AntDesign name="poweroff" size={24} color="#b2bfe6" />
             </TouchableOpacity>
           </View>
-            <Text h2 h2Style={styles.welcomeHeading}>What's up, {auth?.currentUser?.displayName}!</Text>
+          <Text h2 h2Style={styles.welcomeHeading}>What's up, {auth?.currentUser?.displayName}!</Text>
           <View style={styles.progressParent}>
                 <View style={styles.progressContainer}>
                   <Progress.Circle 
-                      size={130} borderWidth={0} showsText={true} 
+                      size={110} borderWidth={0} showsText={true} 
                       color={'#85a4f9'}
                       unfilledColor={'#06257a'}
                       borderColor={'#303030'}
@@ -84,9 +90,12 @@ export default function Home({navigation}) {
                       }}
                   
                       />
-                   <TouchableOpacity onPress={() => navigation.navigate('AddTodo')}>
-                       <Text style={styles.addTaskbutton}><Entypo name="circle-with-plus" size={24} color="#ffffff" /> Add new task</Text>
-                    </TouchableOpacity>
+          
+                </View>
+                <View>
+                   <Text>Business : {tasksCount.Business}</Text>
+                   <Text>Personal : {tasksCount.Personal}</Text>
+                   <Text>Other : {tasksCount.Other}</Text>
                 </View>
           </View>
             <View style={styles.list}>
@@ -98,6 +107,9 @@ export default function Home({navigation}) {
                )}
                />
             </View>
+            <TouchableOpacity style={styles.addTaskbutton} onPress={() => navigation.navigate('AddTodo')}>
+                      <Text><AntDesign name="plus" size={24} color="#ffffff" /></Text>
+            </TouchableOpacity>
           </View>
         </View>
         </TouchableWithoutFeedback>
@@ -144,12 +156,16 @@ const styles = StyleSheet.create({
      borderRadius:10
    },
    addTaskbutton : {
-     backgroundColor:'#A10CC9',
-     padding: 15,
+     position:'absolute',
+     bottom: 20,
+     right: 20,
+     backgroundColor:'#EB06FF',
+     padding: 20,
      flexDirection:'row',
      alignItems:'center',
      color: '#b2bfe6',
      fontSize:18,
-     borderRadius:4
+     borderRadius:70
+
    }
   });

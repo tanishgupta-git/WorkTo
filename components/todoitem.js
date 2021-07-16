@@ -6,7 +6,11 @@ import { db,auth } from '../firebase/config';
 
 export default function TodoItem({ item,pressHandler,setTodos}){
  const [done,Setdone] = useState(item.done);
-
+ const colorItem = {
+     Business : '#657fcd',
+     Personal : '#A10CC9',
+     Other    : '#3399ff'
+ }
  const doneHandler = () => {
       const user = auth?.currentUser?.email;
       const DateObject = new Date();
@@ -34,18 +38,18 @@ export default function TodoItem({ item,pressHandler,setTodos}){
           <View style={styles.item}>
            { done ?
              ( <TouchableOpacity onPress={doneHandler} >
-               <AntDesign name="checkcircle" size={24} color="#3450A1" />
+               <AntDesign name="checkcircle" size={24} color={colorItem[item.tasktype]} />
                </TouchableOpacity>
              )
                 :
             ( <TouchableOpacity onPress={doneHandler} >
-               <Entypo name="circle" size={24} color="#A10CC9" />
+               <Entypo name="circle" size={24} color={colorItem[item.tasktype]} />
             </TouchableOpacity>
             )
            }
             <Text style={done ?  styles.itemDonetext : styles.itemText}>{ item.title }</Text>
             <TouchableOpacity style={styles.deleted} onPress={() => pressHandler(item.key)}>
-                <MaterialIcons name="arrow-forward-ios" size={24} color="#A10CC9" />
+                <MaterialIcons name="arrow-forward-ios" size={24} color={colorItem[item.tasktype]} />
             </TouchableOpacity>
           </View>
   )
