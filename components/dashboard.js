@@ -8,7 +8,7 @@ const Dashboard = ({todos}) => {
     const [tasksCount,setTasksCount] = useState({Business:0,Personal:0,Other:0});
 
     useEffect(() => {
-
+   
         const doneDocs =  todos.reduce( (x,y) => {
           if (y.done) {
             return x + 1
@@ -18,13 +18,12 @@ const Dashboard = ({todos}) => {
         },0);
         if(!todos.length) {
           setProgress(0);
-          return;
+        }else{
+          setProgress( (doneDocs/todos.length) * 100 );
         }
-       setProgress( (doneDocs/todos.length) * 100 );
        const businessTasks = countTaskType(todos,'Business');
        const personalTasks = countTaskType(todos,'Personal');
        const otherTasks = countTaskType(todos,'Other');
-
        setTasksCount({Business:businessTasks,Personal:personalTasks,Other:otherTasks});
     
       },[todos])

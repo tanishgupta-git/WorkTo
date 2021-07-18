@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
    list : {
      flex: 1,
      marginTop:20,
-     marginBottom:70
+     marginBottom:100
    },
    listHeading : {
      color: '#98ade7',
