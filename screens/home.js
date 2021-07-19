@@ -40,8 +40,7 @@ export default function Home({navigation}) {
       })
     }
 
-    return (
-        <TouchableWithoutFeedback onPress={()=> { Keyboard.dismiss(); }}>   
+    return (  
             <View style={styles.container}>
                 <StatusBar backgroundColor="#3450A1" />
                 <ScrollView>
@@ -68,7 +67,6 @@ export default function Home({navigation}) {
                                     <Text><AntDesign name="plus" size={24} color="#ffffff" /></Text>
                       </TouchableOpacity>
             </View>
-        </TouchableWithoutFeedback>
       );
 
 }
@@ -80,20 +78,23 @@ const styles = StyleSheet.create({
     },
     logoutbar : {
       flexDirection:'row',
-      justifyContent:'flex-end'
+      justifyContent:'flex-end',
+      padding:20,
+      paddingBottom:0
     },
     welcomeHeading : {
       fontSize:30,
-      marginVertical:15,
+      marginVertical:20,
+      marginHorizontal :20,
       color: '#EFF1F7'
     },
     content: {
-      flex: 1,
-      padding: 20
+      flex: 1
     },
    list : {
      flex: 1,
      marginTop:20,
+     padding: 20,
      marginBottom:100
    },
    listHeading : {

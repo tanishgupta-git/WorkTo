@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View,ScrollView } from 'react-native'
 import * as Progress from 'react-native-progress';
 import countTaskType from '../utils/countTasktype';
 
@@ -29,34 +29,52 @@ const Dashboard = ({todos}) => {
       },[todos])
 
     return (
-        <View style={styles.dashboard}>
-           <View style={styles.progressParent}>
-                    <View style={styles.progressContainer}>
-                            <Progress.Circle 
-                                size={120} borderWidth={0} showsText={true} color={'#85a4f9'} unfilledColor={'#06257a'}
-                                borderColor={'#303030'} progress={progress / 100} animated thickness={10} formatText={() => { return `${progress}%`}}
-                                />    
-                                <Text style={styles.countHeadtext}>{todos.length} Task's</Text>        
-                    </View>
-            </View>
+                 <ScrollView style={{ flex : 1}} horizontal>
+
+                    {/* progress bar */}
+                        <View style={{...styles.dashboardItem,...styles.dashboardItemcenter}}>
+                                <Progress.Circle 
+                                    size={100} borderWidth={0} showsText={true} color={'#85a4f9'} unfilledColor={'#06257a'}
+                                    borderColor={'#303030'} progress={progress / 100} animated thickness={10} formatText={() => { return `${progress}%`}}
+                                    />    
+                                    <Text style={styles.countHeadtext}>{todos.length} Task's</Text>        
+                        </View>
+                      
+                      {/* business type item */}
+                        <View style={styles.dashboardItem}>
+                            <Text style={styles.countTypetext}>{tasksCount.Business} tasks</Text>
+                            <Text style={styles.countTypehead}>Business</Text>
+              
+                            <View style={styles.lineBackcontainer}>
+                              <View style={{...styles.lineBack,...styles.businessColor}}></View>
+                            </View>
         
-            <View style={styles.countContainer} >
-                <View style={styles.countType}>
-                    <Text style={styles.countTypehead}>Business</Text>
-                    <Text style={styles.countTypetext}>{tasksCount.Business} tasks</Text>
-                </View>
-                <View style={styles.countType}>
-                   <Text style={styles.countTypehead}>Personal</Text>
-                   <Text style={styles.countTypetext}>{tasksCount.Personal} tasks</Text>
-                </View>
-                <View style={styles.countType}>
-                   <Text style={styles.countTypehead}>Other</Text>
-                   <Text style={styles.countTypetext}>{tasksCount.Other} tasks</Text>
-                </View>
+                        </View>
 
-            </View>
+                        {/* personal type item */}
+                        <View style={styles.dashboardItem}>
+                        <Text style={styles.countTypetext}>{tasksCount.Personal} tasks</Text>
+                          <Text style={styles.countTypehead}>Personal</Text>
+                          
+                          <View style={styles.lineBackcontainer}>
+                              <View style={{...styles.lineBack,...styles.personalColor}}></View>
+                            </View>
 
-    </View>
+                        </View>
+
+                        {/* other type item */}
+                        <View style={styles.dashboardItem}>
+                          <Text style={styles.countTypetext}>{tasksCount.Other} tasks</Text>
+                          <Text style={styles.countTypehead}>Other</Text>
+                          <View style={styles.lineBackcontainer}>
+                              <View style={{...styles.lineBack,...styles.otherColor}}></View>
+                            </View>
+
+                        </View>
+         
+                </ScrollView>
+  
+  
     )
 }
 
@@ -64,16 +82,16 @@ export default Dashboard
 
 const styles = StyleSheet.create({
 
-       progressParent : {
-        alignItems:'center'
-       },
-       progressContainer : {
+       dashboardItem : {
         backgroundColor:'#041955',
-        width:'90%',
-        padding: 29,
-        marginVertical:10,
+        width:240,
+        padding: 15,
         borderRadius:10,
-        alignItems:'center'
+        marginHorizontal :15,
+        justifyContent:'center'
+       },
+       dashboardItemcenter : {
+        alignItems:'center',
        },
        countHeadtext : {
         color: '#98ade7',
@@ -81,24 +99,34 @@ const styles = StyleSheet.create({
         fontSize:20,
         marginTop:15
        },
-       countContainer : {
-           flexDirection : 'row',
-           flexWrap:'wrap',
-           justifyContent:'space-around'
-       },
-       countType : {
-           backgroundColor:'#041955',
-           padding: 20,
-           width: '40%',
-           marginVertical : 10,
-           borderRadius : 10
-       },
+
        countTypehead : {
            fontWeight : 'bold',
-           fontSize : 20,
+           fontSize :25,
+           marginTop:10,
+           marginBottom:15,
            color : '#c8d6e7'
        },
        countTypetext : {
-           color: '#94b4fb'
+           color: '#94b4fb',
+           fontSize:18
+       },
+       lineBackcontainer :{
+         height: 5,
+         backgroundColor:'#536c9c',
+         borderRadius:20
+       },
+       lineBack : {
+         height: '100%',
+         width: '50%'
+       },
+       businessColor : {
+        backgroundColor:'#657fcd'
+       },
+       personalColor :{
+        backgroundColor:'#A10CC9'
+       },
+       otherColor : {
+        backgroundColor:'#3399ff'
        }
 })
