@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { View, TextInput,TouchableOpacity, Alert,Keyboard,TouchableWithoutFeedback } from 'react-native';
+import { View, TextInput,TouchableOpacity, Alert,Keyboard,TouchableWithoutFeedback,ActivityIndicator } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Button } from 'react-native-elements';
 import { auth,db } from '../firebase/config';
@@ -15,16 +15,17 @@ export default function EditTodo({navigation,route}) {
       {label: 'Personal', value: 'Personal'},
       {label: 'Other', value: 'Other'},
     ]);
-
+    const [editLoader,setEditLoader] = useState(false);
     const { todoId,updateCheck } = route.params; 
     
     useEffect(() => {
-     
+        setEditLoader(true);
         const user = auth?.currentUser?.email;
         const DateObject = new Date();
         const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
 
         db.collection('todos').doc(user).collection(date).doc(todoId).get().then( doc => {
+           setEditLoader(false);
            setTitle(doc.data().title);
            setDescription(doc.data().description);
            setValuePicker(doc.data().tasktype);
@@ -36,19 +37,32 @@ export default function EditTodo({navigation,route}) {
 
     const submitHandler = () => {
 
+      setEditLoader(true);
+
       if (!title.length || !description.length || !valuePicker) {
+
+        setEditLoader(false);
         Alert.alert("All the fields are required");
         return;
+
       }
 
-        if (title.length < 3) {
-          Alert.alert("Title must be greater than 5 characters");
-          return;
-        }
-        if (description.length < 10) {
-          Alert.alert("Description must be greater than 10 characters");
-          return;
-        }
+      if (title.length < 3) {
+
+        setEditLoader(false);
+        Alert.alert("Title must be greater than 5 characters");
+        return;
+
+      }
+
+      if (description.length < 10) {
+
+        setEditLoader(false);
+        Alert.alert("Description must be greater than 10 characters");
+        return;
+
+      }
+
         const user = auth?.currentUser?.email;
         const DateObject = new Date();
         const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
@@ -113,6 +127,13 @@ export default function EditTodo({navigation,route}) {
           <View style={styles.addTaskButtonContainer}>            
                 <TouchableOpacity><Button onPress={submitHandler}  title='Update Task' buttonStyle={styles.addButton}/></TouchableOpacity> 
           </View>
+          {
+            editLoader && 
+            <View style={styles.formSubmitloader}> 
+                    <ActivityIndicator size="large" color='#A10CC9' />
+                </View>
+
+             }
           </View>
       </TouchableWithoutFeedback>
      )  

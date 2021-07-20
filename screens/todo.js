@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from 'react'
-import { Alert, StyleSheet,View,TouchableOpacity,ScrollView } from 'react-native'
+import { Alert, StyleSheet,View,TouchableOpacity,ScrollView,ActivityIndicator} from 'react-native'
 import { db,auth } from '../firebase/config';
 import { Text } from 'react-native-elements';
 import { Ionicons,AntDesign } from '@expo/vector-icons';
@@ -9,14 +9,17 @@ import { Ionicons,AntDesign } from '@expo/vector-icons';
 
 export default function Todo({route,navigation}) {
     const [todo,setTodo] = useState({title:"",description:"" });
+    const [loading,setLoading] = useState(false);
     const { todoId,updateCheck=false } = route.params; 
-    useEffect(() => {
 
+    useEffect(() => {
+        setLoading(true);
         const user = auth?.currentUser?.email;
         const DateObject = new Date();
         const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
         db.collection('todos').doc(user).collection(date).doc(todoId).get().then( doc => {
-            setTodo(doc.data())
+            setTodo(doc.data());
+            setLoading(false);
         }).catch( err => {
             Alert.alert(err);
         }) 
@@ -38,35 +41,51 @@ export default function Todo({route,navigation}) {
        
        
     return (
-        <ScrollView style={styles.container}>
-            <Text style={styles.todoType}>{ todo.tasktype}</Text>
-            <Text h2 h2Style={styles.todoHeading}>{todo.title}</Text>
-            <Text style={styles.description}>{todo.description}</Text>
-            { todo.done 
-               ? 
-                <View style={styles.taskdoneContainer}>
-                     <Ionicons name="checkmark-done-circle-outline" size={24} color="#c5cfec" /> 
-                     <Text style={styles.taskdoneText}>Completed</Text>
-                </View> 
-                : 
-                <View style={styles.taskdoneContainer}>
-                   <AntDesign name="exclamationcircleo" size={24} color="#c5cfec" />
-                   <Text style={styles.taskdoneText}>Not Completed</Text>
+        <View style={styles.container}>
+        {
+                loading 
+                 ?
+
+                <View style={styles.loadingContainer}> 
+                        <ActivityIndicator size="large" color='#A10CC9' />
                 </View>
+
+                :
+                <ScrollView style={styles.scrollContainer}>
+                    <Text style={styles.todoType}>{ todo.tasktype}</Text>
+                    <Text h2 h2Style={styles.todoHeading}>{todo.title}</Text>
+                    <Text style={styles.description}>{todo.description}</Text>
+                    { todo.done 
+                    ? 
+                        <View style={styles.taskdoneContainer}>
+                            <Ionicons name="checkmark-done-circle-outline" size={24} color="#c5cfec" /> 
+                            <Text style={styles.taskdoneText}>Completed</Text>
+                        </View> 
+                        : 
+                        <View style={styles.taskdoneContainer}>
+                        <AntDesign name="exclamationcircleo" size={24} color="#c5cfec" />
+                        <Text style={styles.taskdoneText}>Not Completed</Text>
+                        </View>
+                    }
+                    <View style={styles.buttonContainer}>
+                            <TouchableOpacity style={styles.todoDelete} onPress={() => pressHandler(todoId)}><Text style={styles.todoDeletetext} >Delete Task</Text></TouchableOpacity>
+                            <TouchableOpacity style={styles.todoDelete} onPress={() => navigation.navigate('EditTodo',{ todoId,updateCheck })}><Text style={styles.todoDeletetext} >Edit Task</Text></TouchableOpacity>
+                    </View> 
+                </ScrollView>
              }
-            <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.todoDelete} onPress={() => pressHandler(todoId)}><Text style={styles.todoDeletetext} >Delete Task</Text></TouchableOpacity>
-                    <TouchableOpacity style={styles.todoDelete} onPress={() => navigation.navigate('EditTodo',{ todoId,updateCheck })}><Text style={styles.todoDeletetext} >Edit Task</Text></TouchableOpacity>
-            </View>
-        </ScrollView>
+
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container : {
         flex: 1,
-        backgroundColor:'#3450A1' ,
-        padding:20
+        backgroundColor:'#3450A1',
+        paddingBottom:20
+    },
+    scrollContainer :{
+        padding: 20
     },
     todoHeading : {
          color: '#ffffff'
@@ -114,5 +133,10 @@ const styles = StyleSheet.create({
          marginVertical : 20,
          flexDirection : 'row',
          justifyContent : 'space-around' 
-      } 
+      },
+      loadingContainer : {
+        flex: 1,
+        justifyContent:'center',
+        alignItems : 'center'
+      }              
 })

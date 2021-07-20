@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     },
    list : {
      flex: 1,
-     marginTop:20,
+     marginTop:5,
      padding: 20,
      marginBottom:100
    },

@@ -10,26 +10,24 @@ const Dashboard = ({todos}) => {
     useEffect(() => {
    
         const doneDocs =  todos.reduce( (x,y) => {
-          if (y.done) {
-            return x + 1
-          }else {
-            return x
-          }
-        },0);
+          if (y.done) { return x + 1 }
+          return x },0);
         if(!todos.length) {
           setProgress(0);
-        }else{
-          setProgress( (doneDocs/todos.length) * 100 );
+          setTasksCount({Business:0,Personal:0,Other:0});
+          return;
         }
+
+       setProgress( (doneDocs/todos.length) * 100 );
        const businessTasks = countTaskType(todos,'Business');
        const personalTasks = countTaskType(todos,'Personal');
-       const otherTasks = countTaskType(todos,'Other');
+       const otherTasks = todos.length - ( businessTasks + personalTasks);
        setTasksCount({Business:businessTasks,Personal:personalTasks,Other:otherTasks});
     
       },[todos])
 
     return (
-                 <ScrollView style={{ flex : 1}} horizontal>
+                 <ScrollView style={styles.dashboard} horizontal>
 
                     {/* progress bar */}
                         <View style={{...styles.dashboardItem,...styles.dashboardItemcenter}}>
@@ -81,7 +79,9 @@ const Dashboard = ({todos}) => {
 export default Dashboard
 
 const styles = StyleSheet.create({
-
+       dashboard :{
+         marginVertical : 15
+       },
        dashboardItem : {
         backgroundColor:'#041955',
         width:240,
