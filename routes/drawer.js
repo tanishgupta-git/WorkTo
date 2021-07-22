@@ -8,7 +8,7 @@ const Drawer = createDrawerNavigator();
 export default function DrawerNavigator() {
     return (
    
-        <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Navigator   drawerContentOptions={{ style:{ backgroundColor:'#041955'},activeTintColor: '#ffffff' ,inactiveTintColor:'#ffffff'}} initialRouteName="Home">
           <Drawer.Screen name="Home" component={HomeStack} />
           <Drawer.Screen name="HistoryTasks" component={HistoryStack} />
         </Drawer.Navigator>

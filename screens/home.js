@@ -3,8 +3,9 @@ import { StyleSheet, View,Alert,StatusBar,TouchableOpacity,ScrollView } from 're
 import  { Text } from 'react-native-elements';
 import TodoItem from '../components/todoitem';
 import { auth,db } from '../firebase/config';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign} from '@expo/vector-icons';
 import Dashboard from '../components/dashboard';
+import Header from '../components/header';
 
 
 export default function Home({navigation}) {
@@ -22,15 +23,6 @@ export default function Home({navigation}) {
       return () => unsubscribe();
     },[])
 
-// fuction for signout 
-    const signOutHandler = () => {
-      auth.signOut().then(() => {
-        navigation.replace('Login');
-      }
-      ).catch(err => {
-        Alert.alert('Error occured in sign out');
-      })
-    }
 
 // function for opening the single todo screen
     const pressHandler = (key) => {
@@ -44,13 +36,10 @@ export default function Home({navigation}) {
                 <StatusBar backgroundColor="#3450A1" />
                 <ScrollView>
 
-                            <View style={styles.logoutbar}>
-                            <TouchableOpacity onPress={signOutHandler}>
-                              <AntDesign name="poweroff" size={24} color="#b2bfe6" />
-                              </TouchableOpacity>
-                            </View>
+                            <Header navigation={navigation}/>
                             <Text h2 h2Style={styles.welcomeHeading}>What's up, {auth?.currentUser?.displayName}!</Text>
                             <Dashboard  todos={todos} />
+                            
                             <View style={styles.list}>
                               <Text style={styles.listHeading}>Today's Task</Text>
                               { 
@@ -76,12 +65,6 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor:'#3450A1'
-    },
-    logoutbar : {
-      flexDirection:'row',
-      justifyContent:'flex-end',
-      padding:20,
-      paddingBottom:0
     },
     welcomeHeading : {
       fontSize:30,
