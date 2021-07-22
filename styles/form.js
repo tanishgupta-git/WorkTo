@@ -8,7 +8,7 @@ export default styles = StyleSheet.create({
        justifyContent:'center'
     }, 
      input : {
-         marginVertical:20,
+         marginBottom :10,
          padding: 15,
          fontSize:19,
          color:'#c5cfed',
@@ -23,10 +23,10 @@ export default styles = StyleSheet.create({
        width: 150,
        padding: 10,
        backgroundColor:'#A10CC9',
-       marginTop:20
+       marginTop:10
      } ,
      textArea: {
-       height:200,
+       height:150,
        textAlignVertical:'top',
        marginVertical:20,
        padding: 15,

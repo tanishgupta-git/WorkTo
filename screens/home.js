@@ -1,5 +1,5 @@
 import React, {useEffect,useState } from 'react';
-import { StyleSheet, View,FlatList,Alert,TouchableWithoutFeedback,Keyboard,StatusBar,TouchableOpacity,ScrollView } from 'react-native';
+import { StyleSheet, View,Alert,StatusBar,TouchableOpacity,ScrollView } from 'react-native';
 import  { Text } from 'react-native-elements';
 import TodoItem from '../components/todoitem';
 import { auth,db } from '../firebase/config';
@@ -9,7 +9,6 @@ import Dashboard from '../components/dashboard';
 
 export default function Home({navigation}) {
     const [todos,setTodos] = useState([]);
-
 
     useEffect(() => {
         const user = auth?.currentUser?.email;
@@ -44,24 +43,26 @@ export default function Home({navigation}) {
             <View style={styles.container}>
                 <StatusBar backgroundColor="#3450A1" />
                 <ScrollView>
-                  <View style={styles.content}>
-                      <View style={styles.logoutbar}>
-                      <TouchableOpacity onPress={signOutHandler}>
-                        <AntDesign name="poweroff" size={24} color="#b2bfe6" />
-                        </TouchableOpacity>
-                      </View>
-                      <Text h2 h2Style={styles.welcomeHeading}>What's up, {auth?.currentUser?.displayName}!</Text>
-                          <Dashboard  todos={todos} />
-                          <View style={styles.list}>
-                            <Text style={styles.listHeading}>Today's Task</Text>
-                            {
-                              todos.map( item => (
-                                <TodoItem key={item.key} item={item} pressHandler={pressHandler} setTodos={setTodos} />
-                              ))
-                            }
 
-                          </View>
-                      </View>
+                            <View style={styles.logoutbar}>
+                            <TouchableOpacity onPress={signOutHandler}>
+                              <AntDesign name="poweroff" size={24} color="#b2bfe6" />
+                              </TouchableOpacity>
+                            </View>
+                            <Text h2 h2Style={styles.welcomeHeading}>What's up, {auth?.currentUser?.displayName}!</Text>
+                            <Dashboard  todos={todos} />
+                            <View style={styles.list}>
+                              <Text style={styles.listHeading}>Today's Task</Text>
+                              { 
+                          
+                                  todos.map( item => (
+                                  <TodoItem key={item.key} item={item} pressHandler={pressHandler} setTodos={setTodos} />
+                                )) 
+                             
+                              }
+
+                            </View>
+
                       </ScrollView>
                       <TouchableOpacity style={styles.addTaskbutton} onPress={() => navigation.navigate('AddTodo')}>
                                     <Text><AntDesign name="plus" size={24} color="#ffffff" /></Text>
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     },
    list : {
      flex: 1,
-     marginTop:5,
+     marginTop:5, 
      padding: 20,
      marginBottom:100
    },
@@ -113,6 +114,6 @@ const styles = StyleSheet.create({
      color: '#b2bfe6',
      fontSize:18,
      borderRadius:70
+   },
 
-   }
   });
