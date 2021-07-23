@@ -19,7 +19,7 @@ export default function AddTodo({navigation}){
     const [addLoader,setAddLoader] = useState(false);
 
 
-    const submitHandler = () => {
+    const submitHandler = async () => {
           setAddLoader(true);
 
           if (!title.length || !description.length || !valuePicker) {
@@ -48,21 +48,23 @@ export default function AddTodo({navigation}){
 
           const user = auth?.currentUser?.email;
           const DateObject = new Date();
-          const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
+          const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
+            
+         try {
+          const docRef  = await db.collection('todos').doc(user).collection("dates").doc(date);
+          const doc =     await docRef.get();
+          if (! doc.exists) {
+             await docRef.set({added : true })
+          }
 
-            db.collection('todos').doc(user).collection(date).add({
-                title,
-                description,
-                done : false,
-                tasktype:valuePicker,
-                timeStamp : firebase.firestore.FieldValue.serverTimestamp()
-              }).then( (docRef) => {
-              navigation.navigate("Home");
+          await db.collection('todos').doc(user).collection(date).add({title,description,done : false,tasktype:valuePicker,timeStamp : firebase.firestore.FieldValue.serverTimestamp()})
+          navigation.navigate("Home");
 
-              }).catch( (error) => {
-                Alert.alert("Error adding task");
-            })
+        } catch (err) {
+          Alert.alert("Error adding task");
+        }
 
+  
      
       }
 

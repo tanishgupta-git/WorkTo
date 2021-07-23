@@ -1,13 +1,34 @@
-import React from 'react';
-import { View, Text,StyleSheet } from 'react-native';
+import React,{ useState,useEffect } from 'react';
+import { View, Text,StyleSheet,Alert } from 'react-native';
+import { auth,db  } from '../firebase/config';
 import Header from '../components/header';
 
 
+
 const HistoryTasks = ({navigation}) => {
+
+    const [tasksDate,setTasksDate] = useState([]);
+    
+    useEffect(() => {
+        const user = auth?.currentUser?.email;
+
+        db.collection('todos').doc(user).collection("dates").get().then((snapshot) => {
+           setTasksDate(snapshot.docs.map( doc => doc.id))
+        }).catch((err) => {
+            Alert.alert("Error while loading history");
+            console.log(err);
+        })
+    },[])
+
     return (
         <View style={styles.container}>
             <Header navigation={navigation} />
-           <Text style={styles.headText}>Currently this fearure is in development mode</Text>
+            {
+                tasksDate.map( taskDate => (
+                    <Text key={taskDate}>{taskDate}</Text>
+                ))
+            }
+
         </View>
     )
 }

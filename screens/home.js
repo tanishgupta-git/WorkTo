@@ -14,7 +14,7 @@ export default function Home({navigation}) {
     useEffect(() => {
         const user = auth?.currentUser?.email;
         const DateObject = new Date();
-        const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
+        const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
 
        const unsubscribe = db.collection('todos').doc(user).collection(date).orderBy('timeStamp','desc').onSnapshot( snapshot => {
              setTodos(snapshot.docs.map(doc => ({key:doc.id,...doc.data()})));

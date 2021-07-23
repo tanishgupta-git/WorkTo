@@ -16,27 +16,31 @@ export default function Todo({route,navigation}) {
         setLoading(true);
         const user = auth?.currentUser?.email;
         const DateObject = new Date();
-        const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
+        const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
         db.collection('todos').doc(user).collection(date).doc(todoId).get().then( doc => {
             setTodo(doc.data());
             setLoading(false);
         }).catch( err => {
-            Alert.alert(err);
+            Alert.alert("Error loading document");
         }) 
 
     },[updateCheck])
 
 
     const pressHandler = (key) => {
+
+        
         const user = auth?.currentUser?.email;
         const DateObject = new Date();
-        const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
+        const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
 
         db.collection('todos').doc(user).collection(date).doc(key).delete().then(() => {
             navigation.navigate("Home");
         }).catch((error) => {
-         console.error("Error removing document: ", error);
-     });
+         console.error("Error removing document: ");
+        });
+
+
        }
        
        

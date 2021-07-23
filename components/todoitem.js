@@ -14,7 +14,7 @@ export default function TodoItem({ item,pressHandler,setTodos}){
  const doneHandler = () => {
       const user = auth?.currentUser?.email;
       const DateObject = new Date();
-      const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
+      const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
 
 
        // here is item.key is the id of firebase document

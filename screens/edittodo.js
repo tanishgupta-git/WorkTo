@@ -22,7 +22,7 @@ export default function EditTodo({navigation,route}) {
         setEditLoader(true);
         const user = auth?.currentUser?.email;
         const DateObject = new Date();
-        const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
+        const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
 
         db.collection('todos').doc(user).collection(date).doc(todoId).get().then( doc => {
            setEditLoader(false);
@@ -65,7 +65,7 @@ export default function EditTodo({navigation,route}) {
 
         const user = auth?.currentUser?.email;
         const DateObject = new Date();
-        const date = DateObject.getDate().toString() + (DateObject.getMonth() + 1).toString() + DateObject.getFullYear().toString();
+        const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
 
           db.collection('todos').doc(user).collection(date).doc(todoId).update({
               title,
