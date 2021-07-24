@@ -6,15 +6,14 @@ import { auth,db } from '../firebase/config';
 import { AntDesign} from '@expo/vector-icons';
 import Dashboard from '../components/dashboard';
 import Header from '../components/header';
-
+import moment from 'moment';
 
 export default function Home({navigation}) {
     const [todos,setTodos] = useState([]);
 
     useEffect(() => {
         const user = auth?.currentUser?.email;
-        const DateObject = new Date();
-        const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
+        const date = moment(new Date()).format('DD-MMM-YYYY')
 
        const unsubscribe = db.collection('todos').doc(user).collection(date).orderBy('timeStamp','desc').onSnapshot( snapshot => {
              setTodos(snapshot.docs.map(doc => ({key:doc.id,...doc.data()})));

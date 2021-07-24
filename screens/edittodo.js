@@ -4,6 +4,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { Button } from 'react-native-elements';
 import { auth,db } from '../firebase/config';
 import styles from '../styles/form';
+import moment from 'moment';
 
 export default function EditTodo({navigation,route}) {
     const [title,setTitle] = useState("");
@@ -21,8 +22,7 @@ export default function EditTodo({navigation,route}) {
     useEffect(() => {
         setEditLoader(true);
         const user = auth?.currentUser?.email;
-        const DateObject = new Date();
-        const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
+        const date = moment(new Date()).format('DD-MMM-YYYY')
 
         db.collection('todos').doc(user).collection(date).doc(todoId).get().then( doc => {
            setEditLoader(false);
@@ -64,8 +64,7 @@ export default function EditTodo({navigation,route}) {
       }
 
         const user = auth?.currentUser?.email;
-        const DateObject = new Date();
-        const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
+        const date = moment(new Date()).format('DD-MMM-YYYY')
 
           db.collection('todos').doc(user).collection(date).doc(todoId).update({
               title,

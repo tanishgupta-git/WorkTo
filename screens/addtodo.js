@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements';
 import { auth,db } from '../firebase/config';
 import firebase from 'firebase';
 import styles from '../styles/form';
+import moment from 'moment';
 
 export default function AddTodo({navigation}){
 
@@ -47,8 +48,7 @@ export default function AddTodo({navigation}){
           }
 
           const user = auth?.currentUser?.email;
-          const DateObject = new Date();
-          const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
+          const date = moment(new Date()).format('DD-MMM-YYYY')
             
          try {
           const docRef  = await db.collection('todos').doc(user).collection("dates").doc(date);

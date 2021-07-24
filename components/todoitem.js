@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity,View } from 'react-native';
 import { Entypo,AntDesign,MaterialIcons} from '@expo/vector-icons';
 import { db,auth } from '../firebase/config';
-
+import moment from 'moment';
 
 export default function TodoItem({ item,pressHandler,setTodos}){
  const [done,Setdone] = useState(item.done);
@@ -13,9 +13,8 @@ export default function TodoItem({ item,pressHandler,setTodos}){
  }
  const doneHandler = () => {
       const user = auth?.currentUser?.email;
-      const DateObject = new Date();
-      const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
-
+     
+      const date = moment(new Date()).format('DD-MMM-YYYY')
 
        // here is item.key is the id of firebase document
        db.collection('todos').doc(user).collection(date).doc(item.key).update({
@@ -48,7 +47,7 @@ export default function TodoItem({ item,pressHandler,setTodos}){
             )
            }
             <Text style={done ?  styles.itemDonetext : styles.itemText}>{ item.title }</Text>
-            <TouchableOpacity style={styles.deleted} onPress={() => pressHandler(item.key)}>
+            <TouchableOpacity style={styles.taskDetailButton} onPress={() => pressHandler(item.key)}>
                 <MaterialIcons name="arrow-forward-ios" size={24} color={colorItem[item.tasktype]} />
             </TouchableOpacity>
           </View>
@@ -79,7 +78,7 @@ const styles  = StyleSheet.create({
         color:'#829ce3',
         textDecorationLine:'line-through'
     },
-    deleted : {
+    taskDetailButton : {
      position:'absolute',
      right: 10,
      top:20

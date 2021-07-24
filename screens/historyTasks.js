@@ -1,19 +1,24 @@
 import React,{ useState,useEffect } from 'react';
-import { View, Text,StyleSheet,Alert } from 'react-native';
+import { View, Text,StyleSheet,Alert,ScrollView,TouchableOpacity } from 'react-native';
+import { MaterialIcons} from '@expo/vector-icons';
 import { auth,db  } from '../firebase/config';
 import Header from '../components/header';
-
+import moment from 'moment';
 
 
 const HistoryTasks = ({navigation}) => {
 
     const [tasksDate,setTasksDate] = useState([]);
-    
+
+
     useEffect(() => {
         const user = auth?.currentUser?.email;
 
         db.collection('todos').doc(user).collection("dates").get().then((snapshot) => {
-           setTasksDate(snapshot.docs.map( doc => doc.id))
+           setTasksDate(snapshot.docs.map( doc => 
+                                ({ id:doc.id,fomateDate:moment(doc.id,'DD-MMM-YYYY').format('DD MMM YYYY')})
+                                
+                                ))
         }).catch((err) => {
             Alert.alert("Error while loading history");
             console.log(err);
@@ -21,15 +26,21 @@ const HistoryTasks = ({navigation}) => {
     },[])
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Header navigation={navigation} />
-            {
-                tasksDate.map( taskDate => (
-                    <Text key={taskDate}>{taskDate}</Text>
-                ))
-            }
-
-        </View>
+            <View style={styles.taskList}> 
+                    {
+                        tasksDate.map( taskDate => (
+                            <View  key={taskDate.id} style={styles.taskItem} > 
+                                <Text style={styles.taskText}>{taskDate.fomateDate}</Text>
+                                <TouchableOpacity style={styles.detailHistory} onPress={() => navigation.navigate('TasksDateHistory')}>
+                                    <MaterialIcons name="arrow-forward-ios" size={24} color="#A10CC9" />
+                                </TouchableOpacity>
+                            </View>
+                        ))
+                    }
+            </View>
+        </ScrollView>
     )
 }
 
@@ -44,5 +55,28 @@ const styles = StyleSheet.create({
        fontSize : 20,
        color: '#ffffff',
        margin: 20
+    },
+    taskList :{
+        marginVertical : 20,
+        alignItems:'center'
+    },
+    taskItem : {
+       backgroundColor:'#041955',
+       padding :20,
+       margin: 10,
+       width: '90%',
+       borderWidth:1,
+       borderColor:'transparent',
+       borderRadius:20
+    },
+    taskText : {
+        marginLeft:10,
+        fontSize:20,
+        color:'#acbdec'
+    },
+    detailHistory : {
+        position:'absolute',
+        right: 10,
+        top:20
     }
 })

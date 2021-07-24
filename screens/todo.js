@@ -3,8 +3,7 @@ import { Alert, StyleSheet,View,TouchableOpacity,ScrollView,ActivityIndicator} f
 import { db,auth } from '../firebase/config';
 import { Text } from 'react-native-elements';
 import { Ionicons,AntDesign } from '@expo/vector-icons';
-
-
+import moment from 'moment';
 
 
 export default function Todo({route,navigation}) {
@@ -15,8 +14,7 @@ export default function Todo({route,navigation}) {
     useEffect(() => {
         setLoading(true);
         const user = auth?.currentUser?.email;
-        const DateObject = new Date();
-        const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
+        const date = moment(new Date()).format('DD-MMM-YYYY')
         db.collection('todos').doc(user).collection(date).doc(todoId).get().then( doc => {
             setTodo(doc.data());
             setLoading(false);
@@ -31,8 +29,7 @@ export default function Todo({route,navigation}) {
 
         
         const user = auth?.currentUser?.email;
-        const DateObject = new Date();
-        const date = DateObject.getDate().toString() + "-" + (DateObject.getMonth() + 1).toString() + "-" + DateObject.getFullYear().toString();
+        const date = moment(new Date()).format('DD-MMM-YYYY')
 
         db.collection('todos').doc(user).collection(date).doc(key).delete().then(() => {
             navigation.navigate("Home");
