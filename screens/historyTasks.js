@@ -28,12 +28,12 @@ const HistoryTasks = ({navigation}) => {
     return (
         <ScrollView style={styles.container}>
             <Header navigation={navigation} />
-            <View style={styles.taskList}> 
+            <View style={styles.dateList}> 
                     {
                         tasksDate.map( taskDate => (
-                            <View  key={taskDate.id} style={styles.taskItem} > 
-                                <Text style={styles.taskText}>{taskDate.fomateDate}</Text>
-                                <TouchableOpacity style={styles.detailHistory} onPress={() => navigation.navigate('TasksDateHistory')}>
+                            <View  key={taskDate.id} style={styles.dateItem} > 
+                                <Text style={styles.dateText}>{taskDate.fomateDate}</Text>
+                                <TouchableOpacity style={styles.detailHistory} onPress={ () =>  navigation.navigate('TasksDateHistory',{ taskDate:taskDate.id}) }>
                                     <MaterialIcons name="arrow-forward-ios" size={24} color="#A10CC9" />
                                 </TouchableOpacity>
                             </View>
@@ -51,16 +51,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor:'#3450A1'
       },
-    headText : {
-       fontSize : 20,
-       color: '#ffffff',
-       margin: 20
-    },
-    taskList :{
+    dateList :{
         marginVertical : 20,
         alignItems:'center'
     },
-    taskItem : {
+    dateItem : {
        backgroundColor:'#041955',
        padding :20,
        margin: 10,
@@ -69,7 +64,7 @@ const styles = StyleSheet.create({
        borderColor:'transparent',
        borderRadius:20
     },
-    taskText : {
+    dateText : {
         marginLeft:10,
         fontSize:20,
         color:'#acbdec'
