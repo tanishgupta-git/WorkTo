@@ -1,7 +1,7 @@
 import React, {useEffect,useState } from 'react';
 import { StyleSheet, View,Alert,StatusBar,TouchableOpacity,ScrollView } from 'react-native';
 import  { Text } from 'react-native-elements';
-import TodoItem from '../components/todoitem';
+import TaskItem from '../components/taskItem';
 import { auth,db } from '../firebase/config';
 import { AntDesign} from '@expo/vector-icons';
 import Dashboard from '../components/dashboard';
@@ -9,24 +9,24 @@ import Header from '../components/header';
 import moment from 'moment';
 
 export default function Home({navigation}) {
-    const [todos,setTodos] = useState([]);
+    const [tasks,setTasks] = useState([]);
 
     useEffect(() => {
         const user = auth?.currentUser?.email;
         const date = moment(new Date()).format('DD-MMM-YYYY')
 
-       const unsubscribe = db.collection('todos').doc(user).collection(date).orderBy('timeStamp','desc').onSnapshot( snapshot => {
-             setTodos(snapshot.docs.map(doc => ({key:doc.id,...doc.data()})));
+       const unsubscribe = db.collection('tasks').doc(user).collection(date).orderBy('timeStamp','desc').onSnapshot( snapshot => {
+             setTasks(snapshot.docs.map(doc => ({key:doc.id,...doc.data()})));
              });
 
       return () => unsubscribe();
     },[])
 
 
-// function for opening the single todo screen
+// function for opening the single task screen
     const pressHandler = (key) => {
-      navigation.navigate('Todo',{
-        todoId:key
+      navigation.navigate('Task',{
+        taskId:key
       })
     }
 
@@ -37,14 +37,14 @@ export default function Home({navigation}) {
 
                             <Header navigation={navigation}/>
                             <Text h2 h2Style={styles.welcomeHeading}>What's up, {auth?.currentUser?.displayName}!</Text>
-                            <Dashboard  todos={todos} />
+                            <Dashboard  tasks={tasks} />
                             
                             <View style={styles.list}>
                               <Text style={styles.listHeading}>Today's Task</Text>
                               { 
                           
-                                  todos.map( item => (
-                                  <TodoItem key={item.key} item={item} pressHandler={pressHandler} setTodos={setTodos} />
+                                  tasks.map( item => (
+                                  <TaskItem key={item.key} item={item} pressHandler={pressHandler} setTasks={setTasks} />
                                 )) 
                              
                               }
@@ -52,7 +52,7 @@ export default function Home({navigation}) {
                             </View>
 
                       </ScrollView>
-                      <TouchableOpacity style={styles.addTaskbutton} onPress={() => navigation.navigate('AddTodo')}>
+                      <TouchableOpacity style={styles.addTaskbutton} onPress={() => navigation.navigate('AddTask')}>
                                     <Text><AntDesign name="plus" size={24} color="#ffffff" /></Text>
                       </TouchableOpacity>
             </View>

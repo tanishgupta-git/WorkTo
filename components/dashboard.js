@@ -3,28 +3,28 @@ import { StyleSheet, Text, View,ScrollView } from 'react-native'
 import * as Progress from 'react-native-progress';
 import countTaskType from '../utils/countTasktype';
 
-const Dashboard = ({todos}) => {
+const Dashboard = ({tasks}) => {
     const [progress,setProgress] = useState(0);
     const [tasksCount,setTasksCount] = useState({Business:0,Personal:0,Other:0});
 
     useEffect(() => {
    
-        const doneDocs =  todos.reduce( (x,y) => {
+        const doneDocs =  tasks.reduce( (x,y) => {
           if (y.done) { return x + 1 }
           return x },0);
-        if(!todos.length) {
+        if(!tasks.length) {
           setProgress(0);
           setTasksCount({Business:0,Personal:0,Other:0});
           return;
         }
 
-       setProgress( (doneDocs/todos.length) * 100 );
-       const businessTasks = countTaskType(todos,'Business');
-       const personalTasks = countTaskType(todos,'Personal');
-       const otherTasks = todos.length - ( businessTasks + personalTasks);
+       setProgress( (doneDocs/tasks.length) * 100 );
+       const businessTasks = countTaskType(tasks,'Business');
+       const personalTasks = countTaskType(tasks,'Personal');
+       const otherTasks = tasks.length - ( businessTasks + personalTasks);
        setTasksCount({Business:businessTasks,Personal:personalTasks,Other:otherTasks});
     
-      },[todos])
+      },[tasks])
 
     return (
                  <ScrollView style={styles.dashboard} horizontal>
@@ -35,7 +35,7 @@ const Dashboard = ({todos}) => {
                                     size={100} borderWidth={0} showsText={true} color={'#85a4f9'} unfilledColor={'#06257a'}
                                     borderColor={'#303030'} progress={progress / 100} animated thickness={10} formatText={() => { return `${progress}%`}}
                                     />    
-                                    <Text style={styles.countHeadtext}>{todos.length} Task's</Text>        
+                                    <Text style={styles.countHeadtext}>{tasks.length} Task's</Text>        
                         </View>
                       
                       {/* business type item */}

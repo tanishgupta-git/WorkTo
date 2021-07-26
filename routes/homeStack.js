@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../screens/home';
-import AddTodo from '../screens/addtodo';
-import EditTodo from '../screens/edittodo';
-import Todo from '../screens/todo';
+import AddTask from '../screens/addTask';
+import EditTask from '../screens/editTask';
+import Task from '../screens/task';
 
 const Stack = createStackNavigator();
 
@@ -13,9 +13,9 @@ export default function HomeStack(){
          
               <Stack.Navigator>
                     <Stack.Screen name="Home" options={{headerShown: false}} component={Home} />
-                    <Stack.Screen name="AddTodo" options={{  headerTitle:'AddTask',headerStyle: {backgroundColor: '#3450A1',height:60},headerTintColor: '#ffffff'}}  component={AddTodo} />
-                    <Stack.Screen name="EditTodo" options={{  headerTitle:'EditTask',headerStyle: {backgroundColor: '#3450A1',height:60},headerTintColor: '#ffffff'}} component={EditTodo} /> 
-                    <Stack.Screen name="Todo" options={{  headerTitle:'Task',headerStyle: {backgroundColor: '#3450A1',height:60},headerTintColor: '#ffffff'}} component={Todo} />
+                    <Stack.Screen name="AddTask" options={{  headerTitle:'AddTask',headerStyle: {backgroundColor: '#3450A1',height:60},headerTintColor: '#ffffff'}}  component={AddTask} />
+                    <Stack.Screen name="EditTask" options={{  headerTitle:'EditTask',headerStyle: {backgroundColor: '#3450A1',height:60},headerTintColor: '#ffffff'}} component={EditTask} /> 
+                    <Stack.Screen name="Task" options={{  headerTitle:'Task',headerStyle: {backgroundColor: '#3450A1',height:60},headerTintColor: '#ffffff'}} component={Task} />
               </Stack.Navigator>
        
         

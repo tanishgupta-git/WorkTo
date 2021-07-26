@@ -1,19 +1,20 @@
-import React,{useState,useEffect} from 'react'
-import { View ,TouchableOpacity,ActivityIndicator,ScrollView} from 'react-native';
+import React,{useEffect, useState} from 'react'
+import { Alert, StyleSheet,View,TouchableOpacity,ScrollView,ActivityIndicator} from 'react-native'
+import { db,auth } from '../firebase/config';
 import { Text } from 'react-native-elements';
 import { Ionicons,AntDesign } from '@expo/vector-icons';
-import { db,auth } from '../firebase/config';
+import moment from 'moment';
 import styles from '../styles/detailTask';
 
-const DateHistory = ({route,navigation}) => {
-
+export default function Task({route,navigation}) {
     const [task,setTask] = useState({title:"",description:"" });
     const [loading,setLoading] = useState(false);
-    const { date,taskId } = route.params; 
+    const { taskId,updateCheck=false } = route.params; 
 
     useEffect(() => {
         setLoading(true);
         const user = auth?.currentUser?.email;
+        const date = moment(new Date()).format('DD-MMM-YYYY')
         db.collection('tasks').doc(user).collection(date).doc(taskId).get().then( doc => {
             setTask(doc.data());
             setLoading(false);
@@ -21,15 +22,17 @@ const DateHistory = ({route,navigation}) => {
             Alert.alert("Error loading document");
         }) 
 
-    },[])
+    },[updateCheck])
 
 
-    const pressHandler = () => {
-     
+    const pressHandler = (key) => {
+
+        
         const user = auth?.currentUser?.email;
+        const date = moment(new Date()).format('DD-MMM-YYYY')
 
-        db.collection('tasks').doc(user).collection(date).doc(taskId).delete().then(() => {
-            navigation.navigate('TasksDateHistory',{ taskDate:taskId})
+        db.collection('tasks').doc(user).collection(date).doc(key).delete().then(() => {
+            navigation.navigate("Home");
         }).catch((error) => {
          console.error("Error removing document: ");
         });
@@ -66,15 +69,12 @@ const DateHistory = ({route,navigation}) => {
                         </View>
                     }
                     <View style={styles.buttonContainer}>
-                            <TouchableOpacity style={styles.taskDelete} onPress={pressHandler}>
-                                <Text style={styles.taskDeletetext} >Delete</Text>
-                            </TouchableOpacity>
-                    </View>
+                            <TouchableOpacity style={styles.taskDelete} onPress={() => pressHandler(taskId)}><Text style={styles.taskDeletetext} >Delete Task</Text></TouchableOpacity>
+                            <TouchableOpacity style={styles.taskDelete} onPress={() => navigation.navigate('EditTask',{ taskId,updateCheck })}><Text style={styles.taskDeletetext} >Edit Task</Text></TouchableOpacity>
+                    </View> 
                 </ScrollView>
              }
 
         </View>
     )
 }
-
-export default DateHistory

@@ -6,7 +6,7 @@ import { auth,db } from '../firebase/config';
 import styles from '../styles/form';
 import moment from 'moment';
 
-export default function EditTodo({navigation,route}) {
+export default function EditTask({navigation,route}) {
     const [title,setTitle] = useState("");
     const [description,setDescription] = useState("");
     const [openPicker, setOpenPicker] = useState(false);
@@ -17,14 +17,14 @@ export default function EditTodo({navigation,route}) {
       {label: 'Other', value: 'Other'},
     ]);
     const [editLoader,setEditLoader] = useState(false);
-    const { todoId,updateCheck } = route.params; 
+    const { taskId,updateCheck } = route.params; 
     
     useEffect(() => {
         setEditLoader(true);
         const user = auth?.currentUser?.email;
         const date = moment(new Date()).format('DD-MMM-YYYY')
 
-        db.collection('todos').doc(user).collection(date).doc(todoId).get().then( doc => {
+        db.collection('tasks').doc(user).collection(date).doc(taskId).get().then( doc => {
            setEditLoader(false);
            setTitle(doc.data().title);
            setDescription(doc.data().description);
@@ -33,7 +33,7 @@ export default function EditTodo({navigation,route}) {
             Alert.alert(err);
         })
 
-    },[todoId])
+    },[taskId])
 
     const submitHandler = () => {
 
@@ -66,13 +66,13 @@ export default function EditTodo({navigation,route}) {
         const user = auth?.currentUser?.email;
         const date = moment(new Date()).format('DD-MMM-YYYY')
 
-          db.collection('todos').doc(user).collection(date).doc(todoId).update({
+          db.collection('tasks').doc(user).collection(date).doc(taskId).update({
               title,
               description,
               tasktype:valuePicker
             }).then( (docRef) => {
-            navigation.navigate("Todo",{
-                todoId,
+            navigation.navigate("Task",{
+                taskId,
                 updateCheck : !updateCheck
             });
             }).catch( (error) => {

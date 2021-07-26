@@ -4,7 +4,7 @@ import { Entypo,AntDesign,MaterialIcons} from '@expo/vector-icons';
 import { db,auth } from '../firebase/config';
 import moment from 'moment';
 
-export default function TodoItem({ item,pressHandler,setTodos}){
+export default function TaskItem({ item,pressHandler,setTasks}){
  const [done,Setdone] = useState(item.done);
  const colorItem = {
      Business : '#657fcd',
@@ -17,15 +17,15 @@ export default function TodoItem({ item,pressHandler,setTodos}){
       const date = moment(new Date()).format('DD-MMM-YYYY')
 
        // here is item.key is the id of firebase document
-       db.collection('todos').doc(user).collection(date).doc(item.key).update({
+       db.collection('tasks').doc(user).collection(date).doc(item.key).update({
            done : !done
        }).then(() => {
            Setdone(prev => !prev);
-           setTodos( prev =>  prev.map( todo => { 
-               if (todo.key === item.key){
-                 todo.done = !done;   
+           setTasks( prev =>  prev.map( task => { 
+               if (task.key === item.key){
+                 task.done = !done;   
                }
-               return todo;
+               return task;
              }) );
        }).catch(() => {
            Alert.alert("Error while updating");

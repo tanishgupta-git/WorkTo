@@ -7,7 +7,7 @@ import firebase from 'firebase';
 import styles from '../styles/form';
 import moment from 'moment';
 
-export default function AddTodo({navigation}){
+export default function AddTask({navigation}){
 
     const [title,setTitle] = useState("");
     const [description,setDescription] = useState("");
@@ -51,13 +51,13 @@ export default function AddTodo({navigation}){
           const date = moment(new Date()).format('DD-MMM-YYYY')
             
          try {
-          const docRef  = await db.collection('todos').doc(user).collection("dates").doc(date);
+          const docRef  = await db.collection('tasks').doc(user).collection("dates").doc(date);
           const doc =     await docRef.get();
           if (! doc.exists) {
              await docRef.set({added : true })
           }
 
-          await db.collection('todos').doc(user).collection(date).add({title,description,done : false,tasktype:valuePicker,timeStamp : firebase.firestore.FieldValue.serverTimestamp()})
+          await db.collection('tasks').doc(user).collection(date).add({title,description,done : false,tasktype:valuePicker,timeStamp : firebase.firestore.FieldValue.serverTimestamp()})
           navigation.navigate("Home");
 
         } catch (err) {

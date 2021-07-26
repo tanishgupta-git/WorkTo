@@ -14,7 +14,7 @@ const HistoryTasks = ({navigation}) => {
     useEffect(() => {
         const user = auth?.currentUser?.email;
 
-        db.collection('todos').doc(user).collection("dates").get().then((snapshot) => {
+        db.collection('tasks').doc(user).collection("dates").get().then((snapshot) => {
            setTasksDate(snapshot.docs.map( doc => 
                                 ({ id:doc.id,fomateDate:moment(doc.id,'DD-MMM-YYYY').format('DD MMM YYYY')})
                                 

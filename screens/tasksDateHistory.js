@@ -11,7 +11,7 @@ const TasksDateHistory = ({route,navigation}) => {
     useEffect(() => {
         const user = auth?.currentUser?.email;
        
-        const unsubscribe = db.collection('todos').doc(user).collection(taskDate).orderBy('timeStamp','desc').onSnapshot( snapshot => {
+        const unsubscribe = db.collection('tasks').doc(user).collection(taskDate).orderBy('timeStamp','desc').onSnapshot( snapshot => {
             setTasks(snapshot.docs.map( doc => ({
                 id:doc.id,
                 ...doc.data()
