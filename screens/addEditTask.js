@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect,useLayoutEffect} from 'react';
 import { View, TextInput,TouchableOpacity, Alert,Keyboard,TouchableWithoutFeedback,ActivityIndicator } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Button } from 'react-native-elements';
@@ -7,7 +7,7 @@ import firebase from 'firebase';
 import styles from '../styles/form';
 import moment from 'moment';
 
-export default function AddTask({navigation}){
+export default function AddEditTask({navigation,route}){
 
     const [title,setTitle] = useState("");
     const [description,setDescription] = useState("");
@@ -17,15 +17,41 @@ export default function AddTask({navigation}){
       {label: 'Business', value: 'Business'},
       {label: 'Personal', value: 'Personal'},
       {label: 'Other', value: 'Other'}]);
-    const [addLoader,setAddLoader] = useState(false);
+    const [loader,setLoader] = useState(false);
+    const { taskId,updateCheck,editTrue } = route.params; 
+    
+    // dynamically chage the route.
+    useLayoutEffect(() => {
+      navigation.setOptions({
+          title : editTrue ? 'Edit Task' : 'Add Task'
+      })
+    },[navigation,editTrue])
+    // the useEffect for edit page
+    useEffect(() => {
+       if (editTrue) {
+
+        setLoader(true);
+        const user = auth?.currentUser?.email;
+        const date = moment(new Date()).format('DD-MMM-YYYY')
+
+        db.collection('tasks').doc(user).collection(date).doc(taskId).get().then( doc => {
+           setLoader(false);
+           setTitle(doc.data().title);
+           setDescription(doc.data().description);
+           setValuePicker(doc.data().tasktype);
+        }).catch( err => {
+            Alert.alert(err);
+        })
+    }
+    },[taskId])
 
 
     const submitHandler = async () => {
-          setAddLoader(true);
 
+          setLoader(true);
           if (!title.length || !description.length || !valuePicker) {
 
-            setAddLoader(false);
+            setLoader(false);
             Alert.alert("All the fields are required");
             return;
 
@@ -33,7 +59,7 @@ export default function AddTask({navigation}){
 
           if (title.length < 3) {
 
-            setAddLoader(false);
+            setLoader(false);
             Alert.alert("Title must be greater than 5 characters");
             return;
 
@@ -41,7 +67,7 @@ export default function AddTask({navigation}){
 
           if (description.length < 10) {
 
-            setAddLoader(false);
+            setLoader(false);
             Alert.alert("Description must be greater than 10 characters");
             return;
 
@@ -49,7 +75,27 @@ export default function AddTask({navigation}){
 
           const user = auth?.currentUser?.email;
           const date = moment(new Date()).format('DD-MMM-YYYY')
-            
+       
+          if (editTrue) {
+
+            // run for the editpage
+            db.collection('tasks').doc(user).collection(date).doc(taskId).update({
+                title,
+                description,
+                tasktype:valuePicker
+              }).then( (docRef) => {
+              navigation.navigate("Task",{
+                  taskId,
+                  updateCheck : !updateCheck
+              });
+              }).catch( (error) => {
+                Alert.alert("Error updating task");
+            })
+
+
+          }else {
+
+         // run for the addpage
          try {
           const docRef  = await db.collection('tasks').doc(user).collection("dates").doc(date);
           const doc =     await docRef.get();
@@ -64,8 +110,9 @@ export default function AddTask({navigation}){
           Alert.alert("Error adding task");
         }
 
-  
+    }
      
+
       }
 
     return (
@@ -110,10 +157,10 @@ export default function AddTask({navigation}){
                 /> 
 
               <View style={styles.addTaskButtonContainer}>   
-                    <TouchableOpacity><Button onPress={submitHandler}  title='Add Task' buttonStyle={styles.addButton}/></TouchableOpacity> 
+                    <TouchableOpacity><Button onPress={submitHandler}  title={editTrue ? 'Edit Task' : 'Add Task'} buttonStyle={styles.addButton}/></TouchableOpacity> 
               </View>
               {
-            addLoader && 
+            loader && 
             <View style={styles.formSubmitloader}> 
                     <ActivityIndicator size="large" color='#A10CC9' />
                 </View>

@@ -28,6 +28,7 @@ const HistoryTasks = ({navigation}) => {
     return (
         <ScrollView style={styles.container}>
             <Header navigation={navigation} />
+         
             <View style={styles.dateList}> 
                     {
                         tasksDate.map( taskDate => (

@@ -1,5 +1,5 @@
 import React, {useEffect,useState } from 'react';
-import { StyleSheet, View,Alert,StatusBar,TouchableOpacity,ScrollView } from 'react-native';
+import { StyleSheet, View,StatusBar,TouchableOpacity,ScrollView } from 'react-native';
 import  { Text } from 'react-native-elements';
 import TaskItem from '../components/taskItem';
 import { auth,db } from '../firebase/config';
@@ -52,7 +52,9 @@ export default function Home({navigation}) {
                             </View>
 
                       </ScrollView>
-                      <TouchableOpacity style={styles.addTaskbutton} onPress={() => navigation.navigate('AddTask')}>
+                      <TouchableOpacity style={styles.addTaskbutton} onPress={() => navigation.navigate('AddEditTask',{
+                        editTrue : false
+                      })}>
                                     <Text><AntDesign name="plus" size={24} color="#ffffff" /></Text>
                       </TouchableOpacity>
             </View>

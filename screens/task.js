@@ -70,7 +70,7 @@ export default function Task({route,navigation}) {
                     }
                     <View style={styles.buttonContainer}>
                             <TouchableOpacity style={styles.taskDelete} onPress={() => pressHandler(taskId)}><Text style={styles.taskDeletetext} >Delete Task</Text></TouchableOpacity>
-                            <TouchableOpacity style={styles.taskDelete} onPress={() => navigation.navigate('EditTask',{ taskId,updateCheck })}><Text style={styles.taskDeletetext} >Edit Task</Text></TouchableOpacity>
+                            <TouchableOpacity style={styles.taskDelete} onPress={() => navigation.navigate('AddEditTask',{ taskId,updateCheck,editTrue:true })}><Text style={styles.taskDeletetext} >Edit Task</Text></TouchableOpacity>
                     </View> 
                 </ScrollView>
              }
