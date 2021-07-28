@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import { TextInput, TouchableWithoutFeedback,View,Alert,Keyboard,StatusBar,ActivityIndicator,StyleSheet} from 'react-native'
+import { TextInput, TouchableWithoutFeedback,View,Alert,Keyboard,StatusBar,ActivityIndicator,StyleSheet,Image} from 'react-native'
 import { Text,Button } from 'react-native-elements';
 import { auth } from '../firebase/config';
 import styles from '../styles/auth';
@@ -42,14 +42,20 @@ export default function Login({navigation}) {
       <TouchableWithoutFeedback onPress={()=> {Keyboard.dismiss()}}> 
         <View style={styles.container} >
         <StatusBar backgroundColor="#041955" />
-            <Text h1 h1Style={styles.logoStyle}>WorkTo</Text>
+
             {
                 loading ?
                 <View style={loginStyles.loaderContainer}> 
+                <View style={styles.logoContainer} >
+                    <Image style={styles.logo} source={require('../assets/worktologo.png')} />
+                </View>
                     <ActivityIndicator size="large" color='#A10CC9' />
                 </View>
                  :
                 <View style={styles.formContainer}>
+                <View style={styles.logoContainer} >
+                    <Image style={styles.logo} source={require('../assets/worktologo.png')} />
+                </View>
                     <TextInput style={styles.input}
                         placeholder='email'
                         placeholderTextColor='#9eb6fa'

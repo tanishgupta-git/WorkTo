@@ -1,5 +1,5 @@
 import React,{ useState,useEffect } from 'react';
-import { View, Text,StyleSheet,Alert,ScrollView,TouchableOpacity } from 'react-native';
+import { View, Text,StyleSheet,Alert,ScrollView,TouchableOpacity,ActivityIndicator } from 'react-native';
 import { MaterialIcons} from '@expo/vector-icons';
 import { auth,db  } from '../firebase/config';
 import Header from '../components/header';
@@ -9,9 +9,10 @@ import moment from 'moment';
 const HistoryTasks = ({navigation}) => {
 
     const [tasksDate,setTasksDate] = useState([]);
-
+    const [loading,setLoading] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         const user = auth?.currentUser?.email;
 
         db.collection('tasks').doc(user).collection("dates").get().then((snapshot) => {
@@ -19,6 +20,7 @@ const HistoryTasks = ({navigation}) => {
                                 ({ id:doc.id,fomateDate:moment(doc.id,'DD-MMM-YYYY').format('DD MMM YYYY')})
                                 
                                 ))
+            setLoading(false)
         }).catch((err) => {
             Alert.alert("Error while loading history");
             console.log(err);
@@ -28,8 +30,13 @@ const HistoryTasks = ({navigation}) => {
     return (
         <ScrollView style={styles.container}>
             <Header navigation={navigation} />
-         
-            <View style={styles.dateList}> 
+            {
+                loading ? 
+                <View style={styles.loaderContainer}>
+                    <ActivityIndicator size="large" color='#A10CC9' />
+                </View>
+                :
+                <View style={styles.dateList}> 
                     {
                         tasksDate.map( taskDate => (
                             <View  key={taskDate.id} style={styles.dateItem} > 
@@ -40,7 +47,10 @@ const HistoryTasks = ({navigation}) => {
                             </View>
                         ))
                     }
-            </View>
+                    { !tasksDate.length &&  <Text style={styles.historyText}>No History Yet</Text>}
+                </View>
+            }
+
         </ScrollView>
     )
 }
@@ -52,6 +62,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor:'#3450A1'
       },
+      loaderContainer : {
+        flex: 1,
+        justifyContent:'center',
+        alignItems : 'center'
+    },
     dateList :{
         marginVertical : 20,
         alignItems:'center'
@@ -74,5 +89,10 @@ const styles = StyleSheet.create({
         position:'absolute',
         right: 10,
         top:20
+    },
+    historyText :{
+        color: '#98ade7',
+        marginVertical:30,
+        fontSize:20
     }
 })

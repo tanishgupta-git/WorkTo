@@ -5,11 +5,15 @@ export default styles = StyleSheet.create({
       flex : 1,
       backgroundColor:'#041955'
     },
-    logoStyle : {
-       color: '#ffffff',
-       textAlign:'center',
-       marginVertical : 10
-    } ,
+    logoContainer :{
+      alignItems:'center',
+      marginBottom : 25
+    },
+    logo : {
+      width: 150,
+      height: 150,
+      resizeMode :'contain'
+    },
     formContainer : {
       flex: 1,
       justifyContent: 'center',

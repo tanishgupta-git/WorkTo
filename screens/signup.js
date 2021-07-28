@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import { Alert } from 'react-native';
-import { View,TextInput,TouchableWithoutFeedback,Keyboard } from 'react-native'
+import { View,TextInput,TouchableWithoutFeedback,Keyboard,Image } from 'react-native'
 import { Text,Button } from 'react-native-elements';
 import { auth } from '../firebase/config';
 import styles from '../styles/auth';
@@ -33,8 +33,10 @@ const Signup = ({navigation}) => {
         Keyboard.dismiss();
       }}>
         <View style={styles.container}>
-                  <Text h1 h1Style={styles.logoStyle}>WorkTo</Text>
                   <View style={styles.formContainer}>
+                  <View style={styles.logoContainer} >
+                    <Image style={styles.logo} source={require('../assets/worktologo.png')} />
+                 </View>
                   <TextInput style={styles.input}
                       placeholder='username'
                       placeholderTextColor='#9eb6fa'
