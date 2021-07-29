@@ -60,9 +60,10 @@ const Signup = ({navigation}) => {
                       secureTextEntry
                   />   
                   <Button containerStyle={styles.button} buttonStyle={styles.styledButton} title='Signup' onPress={handleSubmit}/>
-                  <Text style={styles.bottomText}>
-                  Already Have An Account ? <TouchableWithoutFeedback onPress={pressHandler}><Text style={styles.linkText}>Log in !</Text></TouchableWithoutFeedback>
-              </Text>
+                  <View style={styles.bottomContainer}>
+                      <Text style={styles.bottomText}>Already Have An Account ? </Text>
+                      <TouchableWithoutFeedback onPress={pressHandler}><Text style={styles.linkText}>Log in !</Text></TouchableWithoutFeedback>
+                 </View>
           </View>
 
         </View>

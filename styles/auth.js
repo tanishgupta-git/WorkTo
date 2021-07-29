@@ -3,7 +3,8 @@ import { StyleSheet } from 'react-native'
 export default styles = StyleSheet.create({
     container : {
       flex : 1,
-      backgroundColor:'#041955'
+      backgroundColor:'#041955',
+      paddingBottom:20
     },
     logoContainer :{
       alignItems:'center',
@@ -38,10 +39,14 @@ export default styles = StyleSheet.create({
     styledButton : {
       backgroundColor : '#EB06FF'
     },
+    bottomContainer : {
+      alignItems : 'center'
+    },
     bottomText : {
      color: '#ffffff'
     },
     linkText : {
+     marginTop:10,
      color: '#EB06FF'
     }
   })

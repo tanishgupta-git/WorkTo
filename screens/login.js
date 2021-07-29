@@ -72,9 +72,10 @@ export default function Login({navigation}) {
                         onSubmitEditing={handleSubmit}
                     />   
                     <Button containerStyle={styles.button}  buttonStyle={styles.styledButton} title='Login' onPress={handleSubmit}/>
-                    <Text style={styles.bottomText}>
-                        Dont' Have An Account ? <TouchableWithoutFeedback onPress={pressHandler}><Text style={styles.linkText}>Sign up !</Text></TouchableWithoutFeedback>
-                    </Text>
+                    <View style={styles.bottomContainer}>
+                        <Text style={styles.bottomText}>Dont' Have An Account ? </Text>
+                        <TouchableWithoutFeedback onPress={pressHandler}><Text style={styles.linkText}>Sign up !</Text></TouchableWithoutFeedback>
+                    </View>
          </View> 
             }
 
