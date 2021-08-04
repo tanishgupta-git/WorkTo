@@ -11,6 +11,10 @@ export default function Login({navigation}) {
 
     const handleSubmit = () => {
         setLoading(true);
+        if(!email || !password ) {
+            Alert.alert("Enter email and password");
+            return;
+        }
         auth.signInWithEmailAndPassword(email, password)
         .catch((error) => {
           setLoading(false);
