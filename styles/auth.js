@@ -15,6 +15,11 @@ export default styles = StyleSheet.create({
       height: 150,
       resizeMode :'contain'
     },
+    loaderContainer : {
+      flex: 1,
+      justifyContent:'center',
+      alignItems : 'center'
+  },
     formContainer : {
       flex: 1,
       justifyContent: 'center',

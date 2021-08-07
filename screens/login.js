@@ -10,11 +10,11 @@ export default function Login({navigation}) {
     const [loading,setLoading] = useState(false);
 
     const handleSubmit = () => {
-        setLoading(true);
         if(!email || !password ) {
             Alert.alert("Enter email and password");
             return;
         }
+        setLoading(true);
         auth.signInWithEmailAndPassword(email, password)
         .catch((error) => {
           setLoading(false);
@@ -49,7 +49,7 @@ export default function Login({navigation}) {
 
             {
                 loading ?
-                <View style={loginStyles.loaderContainer}> 
+                <View style={styles.loaderContainer}> 
                 <View style={styles.logoContainer} >
                     <Image style={styles.logo} source={require('../assets/worktologo.png')} />
                 </View>
@@ -88,11 +88,3 @@ export default function Login({navigation}) {
         </TouchableWithoutFeedback>
     )
 }
-
-const loginStyles = StyleSheet.create({
-    loaderContainer : {
-        flex: 1,
-        justifyContent:'center',
-        alignItems : 'center'
-    }
-})
